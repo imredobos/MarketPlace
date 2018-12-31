@@ -20,6 +20,7 @@ CREATE TABLE products (
     category varchar (255),
     seller_id INT,
     stock INT,
+    query_count INT default 0,
     PRIMARY KEY (product_id),
     FOREIGN KEY (seller_id) REFERENCES sellers(seller_id)
 );
