@@ -1,51 +1,62 @@
 package com.imredobos.marketplace.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.imredobos.marketplace.entity.view.View;
 
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name = "products")
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product {
 
-    public static final String PRODUCT_ASD = "product.asd";
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
+    @JsonView(View.Summary.class)
     private Long id;
 
     @Column(name = "name")
+    @JsonView(View.Summary.class)
     private String name;
 
     @Column(name = "description")
+    @JsonView(View.Summary.class)
     private String description;
 
     @Column(name = "price")
+    @JsonView(View.Summary.class)
     private Integer price;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category")
+    @JsonView(View.Summary.class)
     private Category category;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "seller_id", referencedColumnName = "seller_id")
-//    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    @JsonView(View.Summary.class)
+    @JsonBackReference
     private Seller seller;
 
     @Column(name = "stock")
+    @JsonView(View.Summary.class)
     private Integer stock;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")
-//    @JsonManagedReference
+    @OneToMany(mappedBy = "product")
+    @JsonView(View.WithSales.class)
+    @JsonManagedReference
     private Set<Sale> sales;
 
     @Column(name = "query_count")
+    @JsonView(View.Summary.class)
     private int queryCount;
 
     public Product() {
-//        this.sales = new HashSet<>();
     }
 
     public Product(String name, String description, Integer price, Category category, Seller seller, Integer stock) {
@@ -55,7 +66,6 @@ public class Product {
         this.category = category;
         this.seller = seller;
         this.stock = stock;
-//        this.sales = new HashSet<>();
     }
 
     public Long getId() {

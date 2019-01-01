@@ -1,6 +1,8 @@
 package com.imredobos.marketplace.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.imredobos.marketplace.entity.view.View;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -15,15 +17,17 @@ public class Sale {
     @Column(name = "sale_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
-//    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    @JsonBackReference
     private Product product;
 
     @Column(name = "unit")
+    @JsonView(View.Summary.class)
     private Integer unit;
 
     @Column(name = "value")
+    @JsonView(View.Summary.class)
     private Integer value;
 
     @CreationTimestamp

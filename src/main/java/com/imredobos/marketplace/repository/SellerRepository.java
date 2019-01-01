@@ -13,6 +13,15 @@ public interface SellerRepository extends JpaRepository<Seller, Long> {
     @Query(value = "select s from Seller s LEFT JOIN FETCH s.products p JOIN FETCH p.sales")
     List<Seller> findAllSellerWithSales();
 
-    @Query(value = "select s from Seller s")
-    List<Seller> findAllSellers();
+    @Query("select s from Seller s LEFT JOIN FETCH s.rates r group by s order by avg(r.rating) desc NULLS LAST")
+    List<Seller> findAllSellerOrderByAvgRatingDesc();
+
+    @Query("select s from Seller s LEFT JOIN FETCH s.rates r group by s order by avg(r.rating) asc NULLS LAST")
+    List<Seller> findAllSellerOrderByAvgRatingAsc();
+
+    @Query("select s from Seller s " +
+            "LEFT JOIN FETCH s.products p " +
+            "LEFT JOIN FETCH p.sales sa" +
+            " group by s order by sum(sa.value) desc NULLS LAST")
+    List<Seller> findTop5SellersByTotalSalesValue();
 }

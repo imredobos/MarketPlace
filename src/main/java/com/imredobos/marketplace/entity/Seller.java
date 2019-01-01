@@ -1,6 +1,10 @@
 package com.imredobos.marketplace.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.imredobos.marketplace.entity.view.ProductView;
+import com.imredobos.marketplace.entity.view.SellerView;
+import com.imredobos.marketplace.entity.view.View;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,36 +17,41 @@ public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seller_id")
+    @JsonView(View.Summary.class)
     private Long id;
 
     @Column(name = "first_name")
+    @JsonView(View.Summary.class)
     private String firstName;
 
     @Column(name = "last_name")
+    @JsonView(View.Summary.class)
     private String lastName;
 
     @Column(name = "email")
+    @JsonView(View.Summary.class)
     private String email;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "seller")
-//    @JsonManagedReference
+    @OneToMany(mappedBy = "seller")
+    @JsonManagedReference
+    @JsonView(View.Summary.class)
     private Set<Product> products;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "seller")
-//    @JsonManagedReference
+    @OneToMany(mappedBy = "seller")
+    @JsonManagedReference
     private Set<Rate> rates;
 
     public Seller() {
-        this.products = new HashSet<Product>();
-        this.rates = new HashSet<>();
+//        this.products = new HashSet<Product>();
+//        this.rates = new HashSet<>();
     }
 
     public Seller(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-        this.products = new HashSet<>();
-        this.rates = new HashSet<>();
+//        this.products = new HashSet<>();
+//        this.rates = new HashSet<>();
     }
 
     public Long getId() {

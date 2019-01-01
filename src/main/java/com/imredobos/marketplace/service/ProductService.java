@@ -3,21 +3,14 @@ package com.imredobos.marketplace.service;
 import com.imredobos.marketplace.entity.Product;
 import com.imredobos.marketplace.entity.Seller;
 import com.imredobos.marketplace.repository.ProductRepository;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import java.awt.geom.AffineTransform;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.atomic.LongAccumulator;
-import java.util.concurrent.atomic.LongAdder;
 
-@Component
+@Service
 public class ProductService {
 
     private ProductRepository productRepository;
@@ -69,7 +62,7 @@ public class ProductService {
             product.setSeller(newProduct.getSeller());
             product.setStock(newProduct.getStock());
             return productRepository.save(product);
-        } else  {
+        } else {
             throw new IllegalArgumentException();
         }
     }

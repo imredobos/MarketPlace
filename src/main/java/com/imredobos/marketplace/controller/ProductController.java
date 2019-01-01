@@ -1,7 +1,9 @@
 package com.imredobos.marketplace.controller;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.imredobos.marketplace.entity.Product;
 import com.imredobos.marketplace.entity.Seller;
+import com.imredobos.marketplace.entity.view.ProductView;
 import com.imredobos.marketplace.service.ProductService;
 import com.imredobos.marketplace.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ public class ProductController {
     }
 
     // Saving product into the database by seller (ID, name, description, price, category, seller, stock)
+    @JsonView(ProductView.Summary.class)
     @PostMapping("/seller/{sellerId}")
     public ResponseEntity saveProduct(@RequestBody Product product, @PathVariable Long sellerId) {
         try {
@@ -38,6 +41,7 @@ public class ProductController {
     }
 
     // Listing products
+    @JsonView(ProductView.Summary.class)
     @GetMapping
     public List<Product> getAllProduct() {
         return productService.getAllProducts();
@@ -45,6 +49,7 @@ public class ProductController {
 
     // Listing products by seller
     @GetMapping("/seller/{sellerId}")
+    @JsonView(ProductView.Summary.class)
     public ResponseEntity<List<Product>> getAllProductBySeller(@PathVariable Long sellerId) {
         Optional<Seller> seller = sellerService.getSellerById(sellerId);
         if (seller.isPresent()) {
@@ -68,6 +73,7 @@ public class ProductController {
 
     // Getting product by ID
     @GetMapping("/{productId}")
+    @JsonView(ProductView.Summary.class)
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
         Optional<Product> product = productService.getProductById(productId);
         if (!product.isPresent()) {
@@ -78,6 +84,7 @@ public class ProductController {
 
     // Modifying product data by ID
     @PutMapping("/{productId}")
+    @JsonView(ProductView.Summary.class)
     public ResponseEntity<Product> updateProductById(@PathVariable Long productId, @RequestBody Product product) {
         //TODO seller_id mapping
         Product updateProduct = productService.updateProduct(productId, product);

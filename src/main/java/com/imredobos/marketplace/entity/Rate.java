@@ -1,6 +1,8 @@
 package com.imredobos.marketplace.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonView;
+import com.imredobos.marketplace.entity.view.View;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -15,19 +17,23 @@ public class Rate {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "rate_id")
+    @JsonView(View.Summary.class)
     private Long id;
 
     @Min(1)
     @Max(5)
     @NotNull
     @Column(name = "rating")
+    @JsonView(View.Summary.class)
     private Integer rating;
 
+    @JsonView(View.Summary.class)
     private String comment;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "seller_id", referencedColumnName = "seller_id", nullable = false)
-//    @JsonBackReference
+    @ManyToOne
+    @JoinColumn(name = "seller_id")
+    @JsonView(View.Summary.class)
+    @JsonBackReference
     private Seller seller;
 
     public Rate() {

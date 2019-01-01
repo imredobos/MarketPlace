@@ -10,10 +10,6 @@ buildscript {
 	}
 }
 
-plugins {
-	id 'net.ltgt.apt' version '0.8'
-}
-
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -36,10 +32,4 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	implementation('org.springframework.boot:spring-boot-starter-jdbc')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
-	compile 'org.mapstruct:mapstruct:1.2.0.Final'
-
-	// OR use this with Java 8 and beyond
-	compile 'org.mapstruct:mapstruct-jdk8:1.2.0.Final'
-
-	apt 'org.mapstruct:mapstruct-processor:1.2.0.Final'
 }
