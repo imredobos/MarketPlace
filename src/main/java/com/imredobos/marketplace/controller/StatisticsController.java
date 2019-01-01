@@ -2,6 +2,7 @@ package com.imredobos.marketplace.controller;
 
 import com.imredobos.marketplace.dto.ProductDTO;
 import com.imredobos.marketplace.dto.SellerDTO;
+import com.imredobos.marketplace.entity.Seller;
 import com.imredobos.marketplace.mapper.ProductMapper;
 import com.imredobos.marketplace.mapper.SellerMapper;
 import com.imredobos.marketplace.service.StatisticsService;
@@ -58,8 +59,8 @@ public class StatisticsController {
 
     //	Listing sellers with their sales data (sales unit and value)
     @GetMapping("/sellers")
-    public List<SellerDTO> getSellersWithSalesData() {
-        return statisticsService.getAllSellersWithSalesData().stream().map(sellerMapper::mapToDTO).collect(Collectors.toList());
+    public List<Seller> getSellersWithSalesData() {
+        return statisticsService.getAllSellersWithSalesData();
     }
 
     //	Listing top 5 sellers by total sales value

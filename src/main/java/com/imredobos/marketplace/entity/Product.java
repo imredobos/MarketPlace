@@ -1,12 +1,10 @@
 package com.imredobos.marketplace.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Entity
 @Table(name = "products")
@@ -33,12 +31,14 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "seller_id", referencedColumnName = "seller_id")
+//    @JsonBackReference
     private Seller seller;
 
     @Column(name = "stock")
     private Integer stock;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")
+//    @JsonManagedReference
     private Set<Sale> sales;
 
     @Column(name = "query_count")

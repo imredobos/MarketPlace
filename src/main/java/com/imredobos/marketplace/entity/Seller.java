@@ -1,7 +1,6 @@
 package com.imredobos.marketplace.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -26,9 +25,11 @@ public class Seller {
     private String email;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "seller")
+//    @JsonManagedReference
     private Set<Product> products;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "seller")
+//    @JsonManagedReference
     private Set<Rate> rates;
 
     public Seller() {

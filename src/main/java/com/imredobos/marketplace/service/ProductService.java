@@ -35,6 +35,7 @@ public class ProductService {
         if (product.isPresent()) {
             int queryCount = product.get().getQueryCount();
             product.get().setQueryCount(++queryCount);
+            productRepository.save(product.get());
         }
         return product;
     }

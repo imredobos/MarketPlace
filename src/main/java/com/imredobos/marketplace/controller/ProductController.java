@@ -1,8 +1,7 @@
 package com.imredobos.marketplace.controller;
 
-import com.imredobos.marketplace.dto.ProductDTO;
 import com.imredobos.marketplace.entity.Product;
-import com.imredobos.marketplace.mapper.ProductMapper;
+import com.imredobos.marketplace.entity.Seller;
 import com.imredobos.marketplace.service.ProductService;
 import com.imredobos.marketplace.service.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,47 +20,55 @@ public class ProductController {
 
     private SellerService sellerService;
 
-    private ProductMapper productMapper;
-
     @Autowired
-    public ProductController(ProductService productService, SellerService sellerService, ProductMapper productMapper) {
+    public ProductController(ProductService productService, SellerService sellerService) {
         this.productService = productService;
         this.sellerService = sellerService;
-        this.productMapper = productMapper;
     }
 
     // Saving product into the database by seller (ID, name, description, price, category, seller, stock)
     @PostMapping("/seller/{sellerId}")
-    public ResponseEntity saveProduct(@RequestBody ProductDTO productDTO, @PathVariable Long sellerId) {
-        Product product = productMapper.mapToEntity(productDTO);
-        productService.saveProduct(product, sellerId);
-        return new ResponseEntity(HttpStatus.CREATED);
+    public ResponseEntity saveProduct(@RequestBody Product product, @PathVariable Long sellerId) {
+        try {
+            productService.saveProduct(product, sellerId);
+            return new ResponseEntity(HttpStatus.CREATED);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     // Listing products
     @GetMapping
     public List<Product> getAllProduct() {
-        //TODO lekér mindent
         return productService.getAllProducts();
     }
 
     // Listing products by seller
     @GetMapping("/seller/{sellerId}")
-    public List<Product> getAllProductBySeller(@PathVariable Long sellerId) {
-        // TODO fos
-        return productService.getAllProductsBySeller(sellerId);
+    public ResponseEntity<List<Product>> getAllProductBySeller(@PathVariable Long sellerId) {
+        Optional<Seller> seller = sellerService.getSellerById(sellerId);
+        if (seller.isPresent()) {
+            List<Product> products = productService.getAllProductsBySeller(sellerId);
+            return ResponseEntity.ok(products);
+
+        }
+        return ResponseEntity.notFound().build();
     }
 
     // Deleting product by ID
     @DeleteMapping("/{productId}")
-    public void deleteProductById(@PathVariable Long productId) {
-        productService.deleteProduct(productId);
+    public ResponseEntity deleteProductById(@PathVariable Long productId) {
+        Optional<Product> product = productService.getProductById(productId);
+        if (product.isPresent()) {
+            productService.deleteProduct(productId);
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
     }
 
     // Getting product by ID
     @GetMapping("/{productId}")
     public ResponseEntity<Product> getProductById(@PathVariable Long productId) {
-        //TODO fos mindent lekérdez
         Optional<Product> product = productService.getProductById(productId);
         if (!product.isPresent()) {
             return ResponseEntity.notFound().build();

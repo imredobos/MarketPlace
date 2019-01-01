@@ -1,7 +1,6 @@
 package com.imredobos.marketplace.entity;
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -9,7 +8,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "sales")
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Sale {
 
     @Id
@@ -19,6 +17,7 @@ public class Sale {
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
+//    @JsonBackReference
     private Product product;
 
     @Column(name = "unit")
