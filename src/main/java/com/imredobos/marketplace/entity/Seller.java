@@ -2,12 +2,9 @@ package com.imredobos.marketplace.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonView;
-import com.imredobos.marketplace.entity.view.ProductView;
-import com.imredobos.marketplace.entity.view.SellerView;
 import com.imredobos.marketplace.entity.view.View;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -32,26 +29,23 @@ public class Seller {
     @JsonView(View.Summary.class)
     private String email;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     @JsonManagedReference
-    @JsonView(View.Summary.class)
+    @JsonView(View.WithProduct.class)
     private Set<Product> products;
 
-    @OneToMany(mappedBy = "seller")
+    @OneToMany(mappedBy = "seller", cascade = CascadeType.ALL)
     @JsonManagedReference
+    @JsonView(View.WithRates.class)
     private Set<Rate> rates;
 
     public Seller() {
-//        this.products = new HashSet<Product>();
-//        this.rates = new HashSet<>();
     }
 
     public Seller(String firstName, String lastName, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
-//        this.products = new HashSet<>();
-//        this.rates = new HashSet<>();
     }
 
     public Long getId() {

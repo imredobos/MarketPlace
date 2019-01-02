@@ -6,6 +6,7 @@ import com.imredobos.marketplace.entity.Product;
 import com.imredobos.marketplace.entity.Seller;
 import com.imredobos.marketplace.entity.view.View;
 import com.imredobos.marketplace.service.StatisticsService;
+import com.imredobos.marketplace.util.SortDirection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,11 +39,12 @@ public class StatisticsController {
     @JsonView(View.Summary.class)
     @GetMapping("/products/order")
     public List<Product> getProductBySalesOrder(@RequestParam("dir") String direction) {
-        return statisticsService.getAllProductsWithSalesDataOrderBySales(direction);
+        SortDirection sortDirection = SortDirection.getDirection(direction);
+        return statisticsService.getAllProductsWithSalesDataOrderBySales(sortDirection);
     }
 
     //	Listing sellers with their sales data (sales unit and value)
-    @JsonView(View.WithSales.class)
+    @JsonView(View.WithProductAndSales.class)
     @GetMapping("/sellers")
     public List<Seller> getSellersWithSalesData() {
         return statisticsService.getAllSellersWithSalesData();
@@ -50,27 +52,28 @@ public class StatisticsController {
 
     // Ordering list of sellers by average rating (parametrized request: ascending or descending)
     @GetMapping("/top-sellers/avg")
+    @JsonView(View.Summary.class)
     public List<Seller> getSellerByAvgRating(@RequestParam("dir") String direction) {
-        return statisticsService.getSellerByAvgRating(direction);
+        SortDirection sortDirection = SortDirection.getDirection(direction);
+        return statisticsService.getSellerByAvgRating(sortDirection);
     }
 
     //	Listing top 5 sellers by total sales value
-    // TODO
     @GetMapping("/top-sellers/total-value")
+    @JsonView(View.Summary.class)
     public List<Seller> getTop5SellersByTotalSalesValue() {
         return statisticsService.getTop5SellersByTotalSalesValue();
     }
 
     //	Listing top 5 most viewed products
-    // TODO
-    @GetMapping("/top-sellers/view")
+    @GetMapping("/top-sellers/most-viewed")
+    @JsonView(View.Summary.class)
     public List<Product> getTop5ProductByQueryCount() {
         return statisticsService.getTop5ProductByQueryCount();
     }
 
 
     //	Total sales per product category
-    // TODO
     @GetMapping("/sales")
     @JsonPropertyOrder({"category, totalSales"})
     public List<Map<String, Integer>> getSalesPerProductCategory() {

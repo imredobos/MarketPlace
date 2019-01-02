@@ -2,6 +2,7 @@ package com.imredobos.marketplace.controller;
 
 import com.imredobos.marketplace.service.PurchaseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +16,8 @@ public class PurchaseController {
         this.purchaseService = purchaseService;
     }
 
-    @PostMapping("/{productId}/{count}")
+    @GetMapping("/{productId}/{count}")
+    @ResponseStatus(HttpStatus.OK)
     public void buyProduct(@PathVariable Long productId, @PathVariable Integer count) {
         purchaseService.buyProduct(productId, count);
     }

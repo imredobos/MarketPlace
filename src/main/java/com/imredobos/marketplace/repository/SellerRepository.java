@@ -11,13 +11,13 @@ import java.util.List;
 public interface SellerRepository extends JpaRepository<Seller, Long> {
 
     @Query(value = "select s from Seller s LEFT JOIN FETCH s.products p JOIN FETCH p.sales")
-    List<Seller> findAllSellerWithSales();
+    List<Seller> findAllSellersWithSales();
 
     @Query("select s from Seller s LEFT JOIN FETCH s.rates r group by s order by avg(r.rating) desc NULLS LAST")
-    List<Seller> findAllSellerOrderByAvgRatingDesc();
+    List<Seller> findAllSellersOrderByAvgRatingDesc();
 
     @Query("select s from Seller s LEFT JOIN FETCH s.rates r group by s order by avg(r.rating) asc NULLS LAST")
-    List<Seller> findAllSellerOrderByAvgRatingAsc();
+    List<Seller> findAllSellersOrderByAvgRatingAsc();
 
     @Query("select s from Seller s " +
             "LEFT JOIN FETCH s.products p " +

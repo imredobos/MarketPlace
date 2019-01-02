@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  marketplace-mysql:
+    image: mysql:latest
+    environment:
+    - MYSQL_ROOT_PASSWORD=root
+    - MYSQL_DATABASE=marketplace_db
+    - MYSQL_PASSWORD=root
+    volumes:
+    - /data/mysql
+  marketplace-app:
+    image: marketplace-app
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    depends_on:
+    - marketplace-mysql
+    ports:
+    - 8085:8080
+    volumes:
+    - /data/marketplace-app

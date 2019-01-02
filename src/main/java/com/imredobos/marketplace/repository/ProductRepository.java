@@ -17,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("select p from Product p where p.seller.id = :sellerId")
     List<Product> findAllProductsBySellerId(@Param("sellerId") Long sellerId);
 
-    @Query("select p from Product p JOIN FETCH p.sales")
+    @Query("select distinct p from Product p LEFT JOIN FETCH p.sales")
     List<Product> findAllProductsWithSales();
 
     @Query("select p from Product p LEFT JOIN FETCH p.sales s group by p order by s.unit asc NULLS FIRST")

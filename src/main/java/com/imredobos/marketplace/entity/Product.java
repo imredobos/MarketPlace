@@ -11,7 +11,6 @@ import java.util.Set;
 
 @Entity
 @Table(name = "products")
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Product {
 
     @Id
@@ -37,8 +36,8 @@ public class Product {
     @JsonView(View.Summary.class)
     private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "seller_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "seller_id", referencedColumnName = "seller_id", nullable = false)
     @JsonView(View.Summary.class)
     @JsonBackReference
     private Seller seller;
@@ -47,7 +46,7 @@ public class Product {
     @JsonView(View.Summary.class)
     private Integer stock;
 
-    @OneToMany(mappedBy = "product")
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @JsonView(View.WithSales.class)
     @JsonManagedReference
     private Set<Sale> sales;
@@ -134,6 +133,10 @@ public class Product {
 
     public void setQueryCount(int queryCount) {
         this.queryCount = queryCount;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     @Override

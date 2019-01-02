@@ -15,11 +15,13 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sale_id")
+    @JsonView(View.Summary.class)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "product_id", referencedColumnName = "product_id", nullable = false)
     @JsonBackReference
+    @JsonView(View.Summary.class)
     private Product product;
 
     @Column(name = "unit")
@@ -32,6 +34,7 @@ public class Sale {
 
     @CreationTimestamp
     @Column(name = "create_date")
+    @JsonView(View.Summary.class)
     private LocalDateTime date;
 
     public Sale() {

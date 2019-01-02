@@ -22,16 +22,15 @@ public class Rate {
 
     @Min(1)
     @Max(5)
-    @NotNull
     @Column(name = "rating")
     @JsonView(View.Summary.class)
-    private Integer rating;
+    private int rating;
 
     @JsonView(View.Summary.class)
     private String comment;
 
-    @ManyToOne
-    @JoinColumn(name = "seller_id")
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "seller_id", referencedColumnName = "seller_id", nullable = false)
     @JsonView(View.Summary.class)
     @JsonBackReference
     private Seller seller;
